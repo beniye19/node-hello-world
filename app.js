@@ -50,6 +50,13 @@ app.get("/", (req, res) => {
   `);
 });
 
-app.listen(port, host);
-console.log(`Running on http://${host}:${port}`);
+// Only start the server if this file is run directly (not required by tests)
+if (require.main === module) {
+  app.listen(port, host, () => {
+    console.log(`Running on http://${host}:${port}`);
+  });
+}
+
+module.exports = app;
+
 
