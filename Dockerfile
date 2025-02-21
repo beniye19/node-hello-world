@@ -1,14 +1,22 @@
-FROM node:12-slim
+# Use an updated and lightweight Node.js version
+FROM node:18-slim
 
-# Create app directory
+# Set working directory
 WORKDIR /usr/src/app
 
-# Install app dependencies
+# Copy package files and install dependencies
 COPY package*.json ./
-RUN npm install
+RUN npm ci --only=production
 
-# Bundle app source
+# Copy application source code
 COPY . .
 
+# Use a non-root user for security (optional)
+RUN useradd --create-home appuser
+USER appuser
+
+# Expose the application port
 EXPOSE 3000
-CMD [ "node", "app.js" ]
+
+# Start the app
+CMD ["node", "app.js"]
